@@ -1,6 +1,6 @@
-import RPi.GPIO as GPIO
 import Adafruit_DHT
-import time
+import RPi.GPIO as GPIO
+
 from lps331ap import LPS331AP as Barometer
 
 barometer = Barometer()
@@ -11,11 +11,19 @@ GPIO_Pin = 9
 
 print('KY-015 sensortest - temperature and humidity')
 
+HUMID_UNIT = '%'
+TEMP_UNIT = '°C'
+PRESSURE_UNIT = 'mmHg'
+
 
 def get_sensor_values():
-    temp_humid = get_from_humid_sensor_or_error()
-    if temp_humid:
-        return temp_humid[0], temp_humid[1], get_pressure()
+    humid_temp = get_from_humid_sensor_or_error()
+    if humid_temp:
+        return [
+            ('Humidity', humid_temp[0], HUMID_UNIT),
+            ('Temperature', humid_temp[1], TEMP_UNIT),
+            ('Pressure', get_pressure(), PRESSURE_UNIT)
+        ]
 
     
 def get_pressure():
